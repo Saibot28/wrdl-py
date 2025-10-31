@@ -6,8 +6,8 @@ allResults = list()     # Create results list to store all guesses
 
 # Function that returns whether a word exists
 def is_valid_word(word):
-    response = requests.get(f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}")  # Check if word is valid
-    return response.status_code == 200
+    response = requests.get(f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}")  # Check if word is valid by pinging some dictionary
+    return response.status_code == 200                                                  # Passes on the service's response
 
 while len(word) != 5 or not is_valid_word(word.lower()):    # Repeats until word is 5 letters and valid
     os.system("cls" if os.name == "nt" else "clear")        # Clears the screen
@@ -18,8 +18,9 @@ for attempt in range(0,6):      # Main loop
 
     while len(guess) != 5 or not is_valid_word(guess.lower()):  # Repeats until guess is 5 letters and valid
         os.system("cls" if os.name == "nt" else "clear")        # Clears screen
-        print("\n".join(map(str, allResults)))                  # (Re)prints results
-        guess = input("\n"*(-attempt+5))                        # Asks for input
+        if allResults != list():
+            print("\n".join(map(str, allResults)))                  # (Re)prints results
+        guess = input(f"\033[100m     \n\033[0m"*(-attempt+6))      # Asks for input
 
     guessResult = list()                                # Create results list to store a single guess
 
@@ -55,8 +56,8 @@ for attempt in range(0,6):      # Main loop
     allResults.append(guess_string)                     # Append the newly created string to a list
     print("\n".join(map(str, allResults)))              # Print all the results below each other
     if guess == word:                           # Checks if game should be won
-        print("Great")
+        print("Great")                          # Print complemetary congratulatory message
         break
     if attempt == 5:                            # Checks if game over message should be printed
-        print(f"Too bad\nThe word was {word}")
+        print(f"Too bad\nThe word was {word}")  # Print what the word was so the player isn't left questioning their life
         break
